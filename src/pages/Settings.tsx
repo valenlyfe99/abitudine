@@ -1,10 +1,5 @@
 import React, { useState } from 'react'
-import {
-  useAppStore,
-  usePendingAmuleto,
-  useRachaGlobal,
-  useAmuletos,
-} from '../store'
+import { useAppStore, useRachaGlobal, useAmuletos } from '../store'
 import { calcularMood } from '../domain'
 
 export default function Settings(): React.ReactElement {
@@ -17,7 +12,6 @@ export default function Settings(): React.ReactElement {
     character,
     playerState,
   } = useAppStore()
-  const pendingAmuleto = usePendingAmuleto()
   const rachaGlobal = useRachaGlobal()
   const amuletos = useAmuletos()
 
@@ -58,7 +52,7 @@ export default function Settings(): React.ReactElement {
     setErrorImportar(null)
     try {
       const text = await archivoImportar.text()
-      importarDatos(text, true) // reemplazar
+      importarDatos(text, true)
       setModalImportar(false)
       setArchivoImportar(null)
     } catch {
@@ -78,7 +72,6 @@ export default function Settings(): React.ReactElement {
         <p className="text-slate-400">Configuración de tu aventura</p>
       </div>
 
-      {/* Tema */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <div>
@@ -106,7 +99,6 @@ export default function Settings(): React.ReactElement {
         </div>
       </div>
 
-      {/* Estado del personaje */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
         <h2 className="text-lg font-semibold text-white mb-4">Tu personaje</h2>
         <div className="flex items-center gap-4">
@@ -125,7 +117,6 @@ export default function Settings(): React.ReactElement {
         </div>
       </div>
 
-      {/* Racha y amuletos */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
         <h2 className="text-lg font-semibold text-white mb-4">Racha y amuletos</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -140,7 +131,6 @@ export default function Settings(): React.ReactElement {
         </div>
       </div>
 
-      {/* Exportar / Importar */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
         <h2 className="text-lg font-semibold text-white mb-4">Respaldar y restaurar</h2>
         <div className="space-y-4">
@@ -176,7 +166,6 @@ export default function Settings(): React.ReactElement {
         </div>
       </div>
 
-      {/* Reiniciar progreso */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
         <h2 className="text-lg font-semibold text-white mb-4">Zona de peligro</h2>
         <button
@@ -187,7 +176,6 @@ export default function Settings(): React.ReactElement {
         </button>
       </div>
 
-      {/* Modal: Importar */}
       {modalImportar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setModalImportar(false)} />
@@ -223,7 +211,6 @@ export default function Settings(): React.ReactElement {
         </div>
       )}
 
-      {/* Modal: Reiniciar */}
       {modalReiniciar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setModalReiniciar(false)} />
@@ -253,3 +240,5 @@ export default function Settings(): React.ReactElement {
     </div>
   )
 }
+
+

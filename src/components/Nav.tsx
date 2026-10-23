@@ -43,7 +43,7 @@ export default function Nav(): React.ReactElement {
       </nav>
 
       {/* Nav inferior (celular) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-slate-700 bg-slate-900/95 backdrop-blur-md z-40">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-slate-700 bg-slate-900/95 backdrop-blur-md z-40 safe-area-bottom pb-12">
         <div className="flex justify-around px-2 py-3">
           {navItems.map((item) => (
             <Link
@@ -64,3 +64,4 @@ export default function Nav(): React.ReactElement {
     </>
   )
 }
+

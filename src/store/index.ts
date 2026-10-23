@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+﻿import { create } from 'zustand'
 import type {
   Habit,
   Completion,
@@ -16,7 +16,6 @@ import {
   hoyLocal,
   calcularRachaHabito,
   calcularRachaGlobal,
-  obtenerDiasEntre,
 } from '../domain'
 import { puedeDesbloquear } from '../domain/unlocks'
 import { EQUIPMENT, getEquipmentById } from '../data/equipment'
@@ -63,14 +62,11 @@ interface AppState {
   hideCelebration: () => void
   checkUnlocksAndCelebrate: (prevLevel?: number, prevRank?: string) => void
 
-  // Amuleto de racha
   usarAmuleto: () => void
   rechazarAmuleto: () => void
 
-  // Tema
   toggleTema: () => void
 
-  // Exportar / importar / reiniciar
   exportarDatos: () => string
   importarDatos: (json: string, reemplazar: boolean) => void
   reiniciarProgreso: () => void
@@ -86,9 +82,6 @@ function detectarTemaGuardado(): Tema {
   if (typeof localStorage !== 'undefined') {
     const guardado = localStorage.getItem('abitudine_tema')
     if (guardado === 'claro' || guardado === 'oscuro') return guardado
-  }
-  if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'oscuro'
   }
   return 'claro'
 }
@@ -159,7 +152,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       playerState: recalculated,
       unlockedEquipment: unlocked,
       equipped,
-      tema: loaded.tema ?? temaGuardado,
+      tema: ((loaded as SaveData & { tema?: string }).tema as Tema) ?? temaGuardado,
       isLoading: false,
       error: null,
       celebration: null,
@@ -168,7 +161,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   save: () => {
-    const { habits, completions, character, playerState, unlockedEquipment, equipped, tema } = get()
+    const { habits, completions, character, playerState, unlockedEquipment, equipped } = get()
+    const { tema } = get()
     if (!character) return
     const adapter = new LocalStorageAdapter()
     const data: SaveData = {
@@ -189,7 +183,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ error: 'No se pudieron guardar los datos.' })
       }
     }
-    // Guardar tema por separado (no forma parte de SaveData del juego)
     try {
       localStorage.setItem('abitudine_tema', tema)
     } catch {
@@ -271,7 +264,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     )
 
     if (existing) {
-      // Desmarcar: verificar si rompe la racha global y ofrecer amuleto
       const completionsSinEsta = completions.filter(
         (c) => !(c.habitId === habitId && c.fecha === fecha)
       )
@@ -285,12 +277,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       const hayAmuletos = prevState.amuletos > 0
 
       if (rompeRacha && hayAmuletos) {
-        // Ofrecer usar amuleto en lugar de desmarcar directamente
         set({ pendingAmuleto: { habitId, fecha } })
         return
       }
 
-      // Si no hay amuletos o no rompe la racha, desmarcar normalmente
       set((state) => {
         const completions2 = state.completions.filter(
           (c) => !(c.habitId === habitId && c.fecha === fecha)
@@ -303,7 +293,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       return
     }
 
-    // Marcar: agregar completación
     set((state) => {
       const completions2 = [
         ...state.completions,
@@ -317,19 +306,17 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   usarAmuleto: () => {
-    const { pendingAmuleto, playerState } = get()
+    const { pendingAmuleto } = get()
     if (!pendingAmuleto) return
-    if (playerState.amuletos <= 0) return
-
-    const { habitId, fecha } = pendingAmuleto
+    const { amuletos } = get().playerState
+    if (amuletos <= 0) return
 
     set((state) => {
       const amuletos = Math.max(0, state.playerState.amuletos - 1)
-      const playerState = { ...state.playerState, amuletos }
-      return { playerState, pendingAmuleto: null }
+      const nuevoPlayerState = { ...state.playerState, amuletos }
+      return { playerState: nuevoPlayerState, pendingAmuleto: null }
     })
 
-    // Mantener la completación (no se desmarca) y celebrar
     get().showCelebration({ type: 'rank', rank: get().playerState.rango })
     get().save()
   },
@@ -338,13 +325,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { pendingAmuleto } = get()
     if (!pendingAmuleto) return
 
-    const { habitId, fecha } = pendingAmuleto
     set({ pendingAmuleto: null })
 
-    // Desmarcar normalmente ahora que se rechazó el amuleto
     set((state) => {
       const completions2 = state.completions.filter(
-        (c) => !(c.habitId === habitId && c.fecha === fecha)
+        (c) =>
+          !(c.habitId === pendingAmuleto.habitId && c.fecha === pendingAmuleto.fecha)
       )
       const playerState = recalcularEstado(state.habits, completions2)
       return { completions: completions2, playerState }
@@ -457,7 +443,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
 
-  // Tema
   toggleTema: () => {
     set((state) => {
       const nuevoTema: Tema = state.tema === 'claro' ? 'oscuro' : 'claro'
@@ -473,7 +458,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().save()
   },
 
-  // Exportar / importar / reiniciar
   exportarDatos: () => {
     const { habits, completions, character, playerState, unlockedEquipment, tema } = get()
     const data = {
@@ -490,31 +474,34 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   importarDatos: (json: string, reemplazar: boolean) => {
-    let parsed: any
+    let parsed: Record<string, unknown>
     try {
-      parsed = JSON.parse(json)
+      parsed = JSON.parse(json) as Record<string, unknown>
     } catch {
       set({ error: 'El archivo no es un JSON válido.' })
       return
     }
 
-    // Validar estructura mínima
-    if (!parsed || typeof parsed !== 'object') {
+    if (!parsed) {
       set({ error: 'El archivo no tiene un formato válido.' })
       return
     }
 
-    const version = parsed.version
+    const version = (parsed as { version: unknown }).version
     if (typeof version !== 'number' || version > DATA_VERSION) {
       set({ error: `Versión de esquema no soportada (${version}).` })
       return
     }
 
-    const habits: Habit[] = Array.isArray(parsed.habits) ? parsed.habits : []
-    const completions: Completion[] = Array.isArray(parsed.completions) ? parsed.completions : []
-    const character = parsed.character || null
-    const playerState = parsed.playerState || estadoInicial([], [])
-    const unlockedEquipment = Array.isArray(parsed.unlockedEquipment) ? parsed.unlockedEquipment : initialUnlocked()
+    const data = parsed as unknown as SaveData
+    const habits: Habit[] = Array.isArray(data.habits) ? data.habits : []
+    const completions: Completion[] = Array.isArray(data.completions)
+      ? data.completions
+      : []
+    const character = data.character as Character | null
+    const unlockedEquipment = Array.isArray(data.unlockedEquipment)
+      ? data.unlockedEquipment
+      : initialUnlocked()
 
     if (reemplazar) {
       set({
@@ -523,18 +510,28 @@ export const useAppStore = create<AppState>((set, get) => ({
         character,
         playerState: recalcularEstado(habits, completions),
         unlockedEquipment,
-        equipped: character?.equipado || { casco: null, armadura: null, arma: null, escudo: null, capa: null, accesorio: null },
-        tema: parsed.tema ?? 'claro',
+        equipped: character?.equipado || {
+          casco: null,
+          armadura: null,
+          arma: null,
+          escudo: null,
+          capa: null,
+          accesorio: null,
+        },
+        tema: ((data as SaveData & { tema?: string }).tema as Tema) ?? 'claro',
         error: null,
       })
     } else {
-      // Fusionar: agregar hábitos y completions nuevos, no sobrescribir existentes
       const { habits: existentes, completions: existCompletions } = get()
       const idsExistentes = new Set(existentes.map((h) => h.id))
       const habitsNuevos = habits.filter((h) => !idsExistentes.has(h.id))
 
-      const fechasExistentes = new Set(existCompletions.map((c) => `${c.habitId}|${c.fecha}`))
-      const completionsNuevas = completions.filter((c) => !fechasExistentes.has(`${c.habitId}|${c.fecha}`))
+      const fechasExistentes = new Set(
+        existCompletions.map((c) => `${c.habitId}|${c.fecha}`)
+      )
+      const completionsNuevas = completions.filter(
+        (c) => !fechasExistentes.has(`${c.habitId}|${c.fecha}`)
+      )
 
       set({
         habits: [...existentes, ...habitsNuevos],
@@ -614,3 +611,6 @@ export function usePendingAmuleto() {
   const { pendingAmuleto } = useAppStore()
   return pendingAmuleto
 }
+
+
+

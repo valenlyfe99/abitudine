@@ -8,6 +8,8 @@ import Inventory from './pages/Inventory'
 import DevPersonaje from './pages/DevPersonaje'
 import Settings from './pages/Settings'
 import Nav from './components/Nav'
+import InstallPrompt from './components/InstallPrompt'
+import UpdateAvailable from './components/UpdateAvailable'
 import { useAppStore } from './store'
 
 function App(): React.ReactElement {
@@ -44,7 +46,13 @@ function App(): React.ReactElement {
   }
 
   if (!character) {
-    return <Onboarding />
+    return (
+      <>
+        <Onboarding />
+        <InstallPrompt />
+        <UpdateAvailable />
+      </>
+    )
   }
 
   return (
@@ -62,6 +70,8 @@ function App(): React.ReactElement {
             <Route path="/dev/personaje" element={<DevPersonaje />} />
           </Routes>
         </main>
+        <InstallPrompt />
+        <UpdateAvailable />
       </div>
     </BrowserRouter>
   )

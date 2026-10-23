@@ -3,12 +3,11 @@ import {
   useAppStore,
   useTodayHabits,
   isHabitCompletedToday,
-  usePendingAmuleto,
+  
 } from '../store'
 import { hoyLocal, calcularMood } from '../domain'
 import Personaje from '../components/character/Personaje'
 import CelebrationModal from '../components/CelebrationModal'
-import AmuletoModal from '../components/AmuletoModal'
 
 export default function Today(): React.ReactElement {
   const {
@@ -18,8 +17,7 @@ export default function Today(): React.ReactElement {
     celebration,
     hideCelebration,
   } = useAppStore()
-  const pendingAmuleto = usePendingAmuleto()
-  const todayHabits = useTodayHabits()
+    const todayHabits = useTodayHabits()
   const today = hoyLocal()
 
   const completedCount = todayHabits.filter((h) => isHabitCompletedToday(h.id)).length
@@ -51,9 +49,9 @@ export default function Today(): React.ReactElement {
       <main className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* Personaje + info */}
         <div className="flex flex-col md:flex-row md:items-center gap-6">
-        <div className="w-40 h-56 flex-shrink-0">
-          {character && <Personaje character={character} mood={mood} size={180} className="mx-auto" />}
-        </div>
+          <div className="w-40 h-56 flex-shrink-0">
+            {character && <Personaje character={character} mood={mood} size={180} className="mx-auto" />}
+          </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-white">{character?.nombre || 'Aventurero'}</h2>
             <p className="text-slate-400">Nivel {playerState.nivel} — {playerState.rango}</p>
@@ -145,3 +143,5 @@ export default function Today(): React.ReactElement {
     </div>
   )
 }
+
+

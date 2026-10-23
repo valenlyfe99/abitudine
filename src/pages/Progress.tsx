@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   useAppStore,
   useTodayHabits,
   isHabitCompletedToday,
-  useHabitStreak,
-  useFechaCumplida,
   useRachaGlobal,
   useAmuletos,
 } from '../store'
 import {
   hoyLocal,
   sumarDias,
-  diaSemana,
-  obtenerDiasEntre,
   habitoCorresponde,
 } from '../domain'
-import type { Habit, Completion } from '../domain/types'
+import type { Habit } from '../domain/types'
 
 const DIAS_SEMANA = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
@@ -25,29 +21,17 @@ export default function Progress(): React.ReactElement {
     completions,
     playerState,
     toggleCompletion,
-    character,
   } = useAppStore()
   const todayHabits = useTodayHabits()
   const today = hoyLocal()
   const rachaGlobal = useRachaGlobal()
   const amuletos = useAmuletos()
 
-  const [mesOffset, setMesOffset] = useState(0) // 0 = mes actual, -1 = mes anterior, etc.
-
-  // Calcular el mes mostrado
-  const [anoMes, setAnoMes] = useState<string>(today.slice(0, 7)) // YYYY-MM
-
-  useEffect(() => {
-    const [ano, mes] = anoMes.split('-').map(Number)
-    const fechaInicio = `${ano}-${String(mes).padStart(2, '0')}-01`
-    // No necesitamos hacer nada más aquí
-  }, [anoMes])
+  const [anoMes, setAnoMes] = useState<string>(today.slice(0, 7))
 
   const [ano, mes] = anoMes.split('-').map(Number)
   const fechaMesInicio = `${ano}-${String(mes).padStart(2, '0')}-01`
-  const fechaMesFin = sumarDias(fechaMesInicio, 31) // aproximado, se filtra abajo
 
-  // Obtener todos los días del mes mostrado
   const diasDelMes: string[] = []
   let actual = fechaMesInicio
   while (actual.startsWith(anoMes)) {
@@ -55,33 +39,27 @@ export default function Progress(): React.ReactElement {
     actual = sumarDias(actual, 1)
   }
 
-  // Días de la semana para el encabezado del calendario
   const primerDia = new Date(`${anoMes}-01`)
-  const diaSemanaPrimer = primerDia.getDay() // 0 = Dom
+  const diaSemanaPrimer = primerDia.getDay()
 
-  // Días previos (del mes anterior) para completar la primera fila
   const diasPrevios: number[] = []
   for (let i = 0; i < diaSemanaPrimer; i++) {
     diasPrevios.push(i)
   }
 
-  // Verificar si una fecha está dentro del rango de corrección (7 días atrás)
   const estaEnRangoCorreccion = (fecha: string): boolean => {
     const haceSieteDias = sumarDias(today, -7)
     return fecha >= haceSieteDias && fecha <= today
   }
 
-  // Obtener cumplimientos de un hábito en una fecha específica
   const estaCumplidoEn = (habitId: string, fecha: string): boolean => {
     return completions.some((c) => c.habitId === habitId && c.fecha === fecha)
   }
 
-  // Hábitos que corresponden a una fecha dada
   const habitsParaFecha = (fecha: string): Habit[] => {
     return habits.filter((h) => !h.archivado && habitoCorresponde(h, fecha))
   }
 
-  // Contar cumplimientos en un día
   const cumplimientosEnFecha = (fecha: string): number => {
     const hs = habitsParaFecha(fecha)
     return hs.filter((h) => estaCumplidoEn(h.id, fecha)).length
@@ -111,9 +89,7 @@ export default function Progress(): React.ReactElement {
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Progreso</h1>
-          <p className="text-slate-400">
-            Tu evolución como aventurero
-          </p>
+          <p className="text-slate-400">Tu evolución como aventurero</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -142,7 +118,6 @@ export default function Progress(): React.ReactElement {
         </div>
       </div>
 
-      {/* Resumen superior */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4">
           <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Nivel</div>
@@ -162,7 +137,6 @@ export default function Progress(): React.ReactElement {
         </div>
       </div>
 
-      {/* Barra de XP */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
         <div className="flex justify-between text-sm text-slate-400 mb-2">
           <span>Experiencia</span>
@@ -179,7 +153,6 @@ export default function Progress(): React.ReactElement {
         </div>
       </div>
 
-      {/* Atributos */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
         <div className="text-xs text-slate-400 uppercase tracking-wider mb-3">Atributos</div>
         <div className="grid grid-cols-3 gap-4">
@@ -197,13 +170,10 @@ export default function Progress(): React.ReactElement {
         </div>
       </div>
 
-      {/* Rachas por hábito */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-white">Rachas por hábito</h3>
-          <span className="text-xs text-slate-400">
-            Actual / Mejor
-          </span>
+          <span className="text-xs text-slate-400">Actual / Mejor</span>
         </div>
         {rachasPorHabito.length === 0 ? (
           <p className="text-slate-400 text-center py-4">No hay rachas registradas.</p>
@@ -215,9 +185,7 @@ export default function Progress(): React.ReactElement {
                   <span className="text-xl">{r.emoji}</span>
                   <div>
                     <div className="text-sm text-white font-medium">{r.nombre}</div>
-                    <div className="text-xs text-slate-500 capitalize">
-                      {r.categoria}
-                    </div>
+                    <div className="text-xs text-slate-500 capitalize">{r.categoria}</div>
                   </div>
                 </div>
                 <div className="flex gap-4 text-sm font-mono">
@@ -230,7 +198,6 @@ export default function Progress(): React.ReactElement {
         )}
       </div>
 
-      {/* Calendario mensual */}
       <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-white">Calendario mensual</h3>
@@ -239,26 +206,19 @@ export default function Progress(): React.ReactElement {
           </span>
         </div>
 
-        {/* Encabezado de días de la semana */}
         <div className="grid grid-cols-7 text-center mb-2">
           {DIAS_SEMANA.map((dia) => (
-            <div key={dia} className="text-xs text-slate-500 font-medium">
-              {dia}
-            </div>
+            <div key={dia} className="text-xs text-slate-500 font-medium">{dia}</div>
           ))}
         </div>
 
-        {/* Días del calendario */}
         <div className="grid grid-cols-7 gap-1">
-          {/* Días previos (vacíos) */}
           {diasPrevios.map((_, i) => (
             <div key={`prev-${i}`} className="aspect-square" />
           ))}
 
-          {/* Días del mes */}
           {diasDelMes.map((fecha) => {
             const diaNum = parseInt(fecha.slice(8), 10)
-            const diaSem = diaSemana(fecha)
             const totalHabits = totalHabitsEnFecha(fecha)
             const cumplidos = cumplimientosEnFecha(fecha)
             const esHoy = fecha === today
@@ -269,17 +229,13 @@ export default function Progress(): React.ReactElement {
               <div
                 key={fecha}
                 className={`aspect-square rounded-lg flex flex-col items-center justify-center p-1 cursor-pointer transition-all ${
-                  esHoy
-                    ? 'ring-2 ring-blue-500'
-                    : ''
+                  esHoy ? 'ring-2 ring-blue-500' : ''
                 } ${porcentaje === 100 && totalHabits > 0 ? 'bg-green-500/20' : ''} ${porcentaje > 0 && porcentaje < 100 ? 'bg-blue-500/10' : ''} ${!enRangoCorreccion ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-700'}`}
                 onClick={
                   enRangoCorreccion
                     ? () => {
                         const hs = habitsParaFecha(fecha)
-                        // Marcar/desmarcar todos los hábitos de ese día que no coincidan
                         hs.forEach((h) => {
-                          const yaCumplido = estaCumplidoEn(h.id, fecha)
                           toggleCompletion(h.id, fecha)
                         })
                       }
@@ -287,9 +243,7 @@ export default function Progress(): React.ReactElement {
                 }
                 aria-label={`Día ${diaNum}: ${cumplidos}/${totalHabits} hábitos cumplidos`}
               >
-                <div className="text-xs font-medium text-white">
-                  {diaNum}
-                </div>
+                <div className="text-xs font-medium text-white">{diaNum}</div>
                 {totalHabits > 0 && (
                   <div className="w-2 h-2 rounded-full mt-1">
                     {porcentaje === 100 ? (
@@ -311,7 +265,6 @@ export default function Progress(): React.ReactElement {
         </div>
       </div>
 
-      {/* Detalle de hábitos de hoy */}
       <div className="mt-6 bg-slate-800/50 border border-slate-700 rounded-xl p-4">
         <h3 className="text-lg font-semibold text-white mb-4">Hábitos de hoy</h3>
         {todayHabits.length === 0 ? (
@@ -324,9 +277,7 @@ export default function Progress(): React.ReactElement {
                 <div
                   key={habit.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
-                    done
-                      ? 'bg-slate-700/50 border-green-500/30'
-                      : 'bg-slate-800 border-slate-700'
+                    done ? 'bg-slate-700/50 border-green-500/30' : 'bg-slate-800 border-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{habit.emoji}</span>
@@ -349,10 +300,11 @@ export default function Progress(): React.ReactElement {
                   </button>
                 </div>
               )
-            )}
+            })}
           </div>
         )}
       </div>
     </div>
   )
 }
+
