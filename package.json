@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:gh-pages": "VITE_BASE_PATH=/abitudine/ tsc && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --ext ts,tsx --max-warnings 0",

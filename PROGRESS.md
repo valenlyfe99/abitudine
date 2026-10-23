@@ -16,9 +16,10 @@
 | 9 | Personaje SVG por capas y estados de ánimo | hecha |
 | 10 | Pantalla Inventario y catálogo de equipo con desbloqueos | hecha |
 | 11 | Pantalla Ajustes y manejo de errores de storage | hecha |
-| 12 | Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest | pendiente |
-| 13 | PWA instalable y cambio de día con app abierta | hecha |
-| 14 | Polish, build de producción y release | pendiente |
+| 12 | Despliegue: GitHub Pages, GitHub Actions, Netlify/Vercel compat, README | hecha |
+| 13 | Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest | pendiente |
+| 14 | PWA instalable y cambio de día con app abierta | hecha |
+| 15 | Polish, build de producción y release | pendiente |
 
 ## Comandos clave
 
@@ -29,4 +30,4 @@
 
 ## Próximo paso
 
-Etapa 12: Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest.
+Etapa 13: Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest adicionales.
