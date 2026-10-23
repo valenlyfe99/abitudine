@@ -44,4 +44,5 @@ export {
 export { puedeDesbloquear, equipoDesbloqueado } from './unlocks'
 
 export { recalcularEstado, estadoInicial } from './recalculo'
+export { calcularMood, actualizarMoodPersonaje } from './mood'
 export { LocalStorageAdapter, DATA_VERSION, StorageError, createEmptySaveData } from './storage'

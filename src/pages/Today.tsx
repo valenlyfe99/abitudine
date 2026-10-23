@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAppStore, useTodayHabits, isHabitCompletedToday } from '../store'
-import { hoyLocal } from '../domain'
+import { hoyLocal, calcularMood } from '../domain'
+import Personaje from '../components/character/Personaje'
 
 export default function Today(): React.ReactElement {
   const { character, playerState, toggleCompletion } = useAppStore()
@@ -9,6 +10,8 @@ export default function Today(): React.ReactElement {
 
   const completedCount = todayHabits.filter((h) => isHabitCompletedToday(h.id)).length
   const totalCount = todayHabits.length
+
+  const mood = character ? calcularMood(playerState) : 'normal'
 
   useEffect(() => {
     const checkDayChange = () => {
@@ -32,14 +35,15 @@ export default function Today(): React.ReactElement {
       </header>
 
       <main className="flex-1 overflow-y-auto p-4 space-y-6">
-        {/* Personaje placeholder + info */}
+        {/* Personaje + info */}
         <div className="flex flex-col md:flex-row md:items-center gap-6">
-          <div className="w-32 h-40 bg-slate-800 border border-slate-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <span className="text-slate-500 text-xs font-mono">Personaje</span>
-          </div>
+        <div className="w-40 h-56 flex-shrink-0">
+          {character && <Personaje character={character} mood={mood} size={180} className="mx-auto" />}
+        </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold text-white">{character?.nombre || 'Aventurero'}</h2>
             <p className="text-slate-400">Nivel {playerState.nivel} — {playerState.rango}</p>
+            <p className="text-xs text-slate-500 mt-1">Estado de ánimo: {mood}</p>
           </div>
         </div>
 

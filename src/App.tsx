@@ -5,6 +5,7 @@ import Today from './pages/Today'
 import Habits from './pages/Habits'
 import Progress from './pages/Progress'
 import Inventory from './pages/Inventory'
+import DevPersonaje from './pages/DevPersonaje'
 import Settings from './pages/Settings'
 import Nav from './components/Nav'
 import { useAppStore } from './store'
@@ -58,6 +59,7 @@ function App(): React.ReactElement {
             <Route path="/progreso" element={<Progress />} />
             <Route path="/inventario" element={<Inventory />} />
             <Route path="/ajustes" element={<Settings />} />
+            <Route path="/dev/personaje" element={<DevPersonaje />} />
           </Routes>
         </main>
       </div>
