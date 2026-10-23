@@ -12,10 +12,10 @@
 | 5 | Pantalla onboarding y creación de personaje | hecha |
 | 6 | Pantalla Hoy: marcar/desmarcar hábitos del día | hecha |
 | 7 | Pantalla Hábitos: crear, editar, archivar, borrar | hecha |
-| 8 | Pantalla Progreso: calendario y corrección hasta 7 días atrás | pendiente |
+| 8 | Pantalla Progreso: calendario y corrección hasta 7 días atrás | hecha |
 | 9 | Personaje SVG por capas y estados de ánimo | hecha |
 | 10 | Pantalla Inventario y catálogo de equipo con desbloqueos | hecha |
-| 11 | Pantalla Ajustes y manejo de errores de storage | pendiente |
+| 11 | Pantalla Ajustes y manejo de errores de storage | hecha |
 | 12 | Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest | pendiente |
 | 13 | PWA instalable y cambio de día con app abierta | hecha |
 | 14 | Polish, build de producción y release | pendiente |
@@ -29,4 +29,4 @@
 
 ## Próximo paso
 
-Etapa 8: Pantalla Progreso (calendario y corrección hasta 7 días atrás).
+Etapa 12: Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest.
