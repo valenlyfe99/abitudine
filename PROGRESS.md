@@ -14,7 +14,7 @@
 | 7 | Pantalla Hábitos: crear, editar, archivar, borrar | hecha |
 | 8 | Pantalla Progreso: calendario y corrección hasta 7 días atrás | pendiente |
 | 9 | Personaje SVG por capas y estados de ánimo | hecha |
-| 10 | Pantalla Inventario y catálogo de equipo con desbloqueos | pendiente |
+| 10 | Pantalla Inventario y catálogo de equipo con desbloqueos | hecha |
 | 11 | Pantalla Ajustes y manejo de errores de storage | pendiente |
 | 12 | Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest | pendiente |
 | 13 | PWA instalable y cambio de día con app abierta | hecha |

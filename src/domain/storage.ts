@@ -104,7 +104,13 @@ export class LocalStorageAdapter implements StorageAdapter {
           : [],
         character: migrated?.character || this.defaultCharacter(),
         playerState: migrated?.playerState || this.defaultPlayerState(),
+        unlockedEquipment: [],
       }
+    }
+
+    // Asegurar unlockedEquipment existe incluso en versión actual
+    if (!Array.isArray(migrated.unlockedEquipment)) {
+      migrated = { ...migrated, unlockedEquipment: [] }
     }
 
     return migrated
@@ -144,5 +150,6 @@ export function createEmptySaveData(character: Character): SaveData {
     completions: [],
     character,
     playerState: estadoInicial([], []),
+    unlockedEquipment: [],
   }
 }

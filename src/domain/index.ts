@@ -12,6 +12,7 @@ export type {
   SaveData,
   UnlockCondition,
   EquipmentItem,
+  CelebrationEvent,
 } from './types'
 
 export {

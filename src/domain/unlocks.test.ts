@@ -9,6 +9,7 @@ const itemNivel5: EquipmentItem = {
   ranura: 'casco',
   rareza: 'raro',
   condicion: { tipo: 'nivel', valor: 5 },
+  svgPath: 'M 0 0 L 10 10',
 }
 
 const itemRacha7: EquipmentItem = {
@@ -18,6 +19,7 @@ const itemRacha7: EquipmentItem = {
   ranura: 'capa',
   rareza: 'raro',
   condicion: { tipo: 'racha', valor: 7 },
+  svgPath: 'M 0 0 L 10 10',
 }
 
 const itemAtributo10: EquipmentItem = {
@@ -27,6 +29,7 @@ const itemAtributo10: EquipmentItem = {
   ranura: 'accesorio',
   rareza: 'raro',
   condicion: { tipo: 'atributo', valor: 10, atributo: 'Sabiduría' },
+  svgPath: 'M 0 0 L 10 10',
 }
 
 function playerState(overrides: Partial<PlayerState> = {}): PlayerState {

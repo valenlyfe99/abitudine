@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { useAppStore, useTodayHabits, isHabitCompletedToday } from '../store'
 import { hoyLocal, calcularMood } from '../domain'
 import Personaje from '../components/character/Personaje'
+import CelebrationModal from '../components/CelebrationModal'
 
 export default function Today(): React.ReactElement {
-  const { character, playerState, toggleCompletion } = useAppStore()
+  const { character, playerState, toggleCompletion, celebration, hideCelebration } = useAppStore()
   const todayHabits = useTodayHabits()
   const today = hoyLocal()
 
@@ -124,6 +125,10 @@ export default function Today(): React.ReactElement {
           )}
         </div>
       </main>
+
+      {celebration && (
+        <CelebrationModal open={true} onClose={() => hideCelebration()} />
+      )}
     </div>
   )
 }

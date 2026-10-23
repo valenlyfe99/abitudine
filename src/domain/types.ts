@@ -56,6 +56,7 @@ export interface SaveData {
   completions: Completion[];
   character: Character;
   playerState: PlayerState;
+  unlockedEquipment?: string[];
 }
 
 export interface UnlockCondition {
@@ -71,4 +72,13 @@ export interface EquipmentItem {
   ranura: Slot;
   rareza: Rarity;
   condicion: UnlockCondition;
+  svgPath: string;
+  svgFill?: string;
+}
+
+export interface CelebrationEvent {
+  type: 'level' | 'rank' | 'unlock'
+  level?: number
+  rank?: string
+  itemId?: string
 }

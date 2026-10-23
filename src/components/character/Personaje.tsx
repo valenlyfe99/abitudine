@@ -4,8 +4,8 @@ import {
   CHARACTER_LAYERS,
   CHARACTER_CX,
   CHARACTER_CY,
-  DEFAULT_EQUIPMENT,
 } from '../../config/character'
+import { getEquipmentById } from '../../data/equipment'
 
 interface PersonajeProps {
   character: Character
@@ -91,71 +91,6 @@ function hairPath(peinado: string, colorPelo: string): React.ReactNode {
   }
 }
 
-function helmet(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY - 28
-  return (
-    <g id="casco" className="layer-casco">
-      <path
-        d={`M ${cx - 20} ${cy - 2} Q ${cx} ${cy - 24} ${cx + 20} ${cy - 2} L ${cx + 20} ${cy + 12} L ${cx - 20} ${cy + 12} Z`}
-        fill={slotColor}
-        stroke="#334155"
-        strokeWidth="2"
-      />
-      <path
-        d={`M ${cx - 6} ${cy - 6} Q ${cx} ${cy - 14} ${cx + 6} ${cy - 6}`}
-        fill="none"
-        stroke="#334155"
-        strokeWidth="2"
-      />
-    </g>
-  )
-}
-
-function armor(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="armadura" className="layer-armadura">
-      <path
-        d={`M ${cx - 22} ${cy - 6} L ${cx + 22} ${cy - 6} L ${cx + 18} ${cy + 34} L ${cx - 18} ${cy + 34} Z`}
-        fill={slotColor}
-        stroke="#334155"
-        strokeWidth="2"
-      />
-      <circle cx={cx} cy={cy + 2} r={10} fill="#334155" />
-    </g>
-  )
-}
-
-function cloak(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="capa" className="layer-capa">
-      <path
-        d={`M ${cx - 8} ${cy - 10} Q ${cx - 26} ${cy + 10} ${cx - 22} ${cy + 40} L ${cx - 16} ${cy + 40} Q ${cx - 18} ${cy + 20} ${cx - 8} ${cy - 10} Z M ${cx + 8} ${cy - 10} Q ${cx + 26} ${cy + 10} ${cx + 22} ${cy + 40} L ${cx + 16} ${cy + 40} Q ${cx + 18} ${cy + 20} ${cx + 8} ${cy - 10} Z`}
-        fill={slotColor}
-        opacity={0.85}
-      />
-    </g>
-  )
-}
-
-function baseClothing(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="ropa" className="layer-ropa">
-      <path
-        d={`M ${cx - 18} ${cy - 4} L ${cx + 18} ${cy - 4} L ${cx + 14} ${cy + 36} L ${cx - 14} ${cy + 36} Z`}
-        fill={slotColor}
-      />
-      <rect x={cx - 14} y={cy - 4} width={28} height={12} fill={slotColor} opacity={0.8} />
-    </g>
-  )
-}
-
 function body(tonoPiel: string): React.ReactNode {
   const cx = CHARACTER_CX
   const cy = CHARACTER_CY
@@ -196,83 +131,53 @@ function face(mood: Mood, tonoPiel: string): React.ReactNode {
   )
 }
 
-function weapon(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="arma" className="layer-arma">
-      <line x1={cx + 16} y1={cy + 6} x2={cx + 34} y2={cy + 24} stroke={slotColor} strokeWidth="6" strokeLinecap="round" />
-      <rect x={cx + 28} y={cy + 18} width={10} height={14} fill={slotColor} />
-    </g>
-  )
-}
-
-function shield(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="escudo" className="layer-escudo">
-      <path
-        d={`M ${cx - 30} ${cy + 10} Q ${cx - 30} ${cy + 30} ${cx - 16} ${cy + 38} Q ${cx - 14} ${cy + 42} ${cx - 14} ${cy + 38} Q ${cx - 14} ${cy + 30} ${cx - 30} ${cy + 10} Z`}
-        fill={slotColor}
-        stroke="#334155"
-        strokeWidth="2"
-      />
-      <circle cx={cx - 22} cy={cy + 24} r={4} fill="#334155" />
-    </g>
-  )
-}
-
-function accessory(slotColor: string): React.ReactNode {
-  const cx = CHARACTER_CX
-  const cy = CHARACTER_CY
-  return (
-    <g id="accesorio" className="layer-accesorio">
-      <circle cx={cx} cy={cy + 2} r={5} fill={slotColor} stroke="#334155" strokeWidth="2" />
-      <path d={`M ${cx - 3} ${cy - 1} L ${cx + 3} ${cy - 1} L ${cx} ${cy + 5} Z`} fill="#334155" />
-    </g>
-  )
-}
-
-function renderLayer(
-  layerId: string,
-  character: Character,
-  mood: Mood
+function renderEquipmentLayer(
+  slot: Slot,
+  equippedId: string | null
 ): React.ReactNode {
-  const slotColors: Record<Slot, string> = {
-    casco: DEFAULT_EQUIPMENT.casco.color,
-    armadura: DEFAULT_EQUIPMENT.armadura.color,
-    arma: DEFAULT_EQUIPMENT.arma.color,
-    escudo: DEFAULT_EQUIPMENT.escudo.color,
-    capa: DEFAULT_EQUIPMENT.capa.color,
-    accesorio: DEFAULT_EQUIPMENT.accesorio.color,
-  }
+  if (!equippedId) return null
+  const item = getEquipmentById(equippedId)
+  if (!item) return null
 
-  const equipped = character.equipado
-  const colorPelo = character.colorPelo
-  const peinado = character.peinado
+  const fill = item.svgFill ?? '#64748b'
 
-  switch (layerId) {
-    case 'cuerpo':
-      return body(character.tonoPiel)
-    case 'capa':
-      return cloak(slotColors.capa)
-    case 'ropa':
-      return baseClothing(slotColors.armadura)
-    case 'armadura':
-      return equipped.armadura ? armor(slotColors.armadura) : null
+  switch (slot) {
     case 'casco':
-      return equipped.casco ? helmet(slotColors.casco) : null
-    case 'pelo':
-      return hairPath(peinado, colorPelo)
-    case 'cara':
-      return face(mood, character.tonoPiel)
+      return (
+        <g id="casco" className="layer-casco">
+          <path d={item.svgPath} fill={fill} stroke="#334155" strokeWidth="2" />
+        </g>
+      )
+    case 'armadura':
+      return (
+        <g id="armadura" className="layer-armadura">
+          <path d={item.svgPath} fill={fill} stroke="#334155" strokeWidth="2" />
+        </g>
+      )
     case 'arma':
-      return equipped.arma ? weapon(slotColors.arma) : null
+      return (
+        <g id="arma" className="layer-arma">
+          <path d={item.svgPath} fill={fill} stroke="#334155" strokeWidth="2" />
+        </g>
+      )
     case 'escudo':
-      return equipped.escudo ? shield(slotColors.escudo) : null
+      return (
+        <g id="escudo" className="layer-escudo">
+          <path d={item.svgPath} fill={fill} stroke="#334155" strokeWidth="2" />
+        </g>
+      )
+    case 'capa':
+      return (
+        <g id="capa" className="layer-capa">
+          <path d={item.svgPath} fill={fill} opacity={0.85} />
+        </g>
+      )
     case 'accesorio':
-      return equipped.accesorio ? accessory(slotColors.accesorio) : null
+      return (
+        <g id="accesorio" className="layer-accesorio">
+          <path d={item.svgPath} fill={fill} stroke="#334155" strokeWidth="2" />
+        </g>
+      )
     default:
       return null
   }
@@ -309,18 +214,29 @@ export default function Personaje({ character, mood, size = 200, className }: Pe
           ${!prefersReducedMotion ? `.layer { animation: idle-bob 3s ease-in-out infinite; }` : ''}
         `}</style>
       </defs>
-      {sortedLayers.map((layer) => (
-        <g
-          key={layer.id}
-          id={`layer-${layer.id}`}
-          className="layer"
-          style={{
-            transformOrigin: `${CX_STR} ${CY_STR}`,
-          }}
-        >
-          {renderLayer(layer.id, character, mood)}
-        </g>
-      ))}
+      {sortedLayers.map((layer) => {
+        const equippedId = character.equipado[layer.id as Slot]
+        return (
+          <g
+            key={layer.id}
+            id={`layer-${layer.id}`}
+            className="layer"
+            style={{
+              transformOrigin: `${CX_STR} ${CY_STR}`,
+            }}
+          >
+            {layer.id === 'cuerpo' ? (
+              body(character.tonoPiel)
+            ) : layer.id === 'pelo' ? (
+              hairPath(character.peinado, character.colorPelo)
+            ) : layer.id === 'cara' ? (
+              face(mood, character.tonoPiel)
+            ) : (
+              renderEquipmentLayer(layer.id as Slot, equippedId)
+            )}
+          </g>
+        )
+      })}
     </svg>
   )
 }
