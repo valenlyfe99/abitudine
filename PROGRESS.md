@@ -5,8 +5,8 @@
 | Etapa | Título | Estado |
 |-------|--------|--------|
 | 0 | Cimientos y plan (git, .gitignore, SPEC, AGENTS, PROGRESS, PLAN, etapa-0) | hecha |
-| 1 | Scaffold Vite + React + TS + Tailwind + PWA + lint | pendiente |
-| 2 | StorageAdapter + localStorage + modelo versionado con migración | pendiente |
+| 1 | Scaffold Vite + React + TS + Tailwind + Vitest + ESLint + Prettier + tipos de dominio + progresión + tests | hecha |
+| 2 | StorageAdapter + localStorage + modelo versionado con migración | en curso |
 | 3 | Dominio puro: hábitos, cumplimientos, rachas | pendiente |
 | 4 | Dominio puro: XP, niveles, rangos, atributos, amuletos | pendiente |
 | 5 | Pantalla onboarding y creación de personaje | pendiente |
@@ -22,8 +22,11 @@
 
 ## Comandos clave
 
-(Vacío por ahora — se completará en la etapa 1.)
+- `npm run dev` — servidor de desarrollo Vite
+- `npm run build` — build de producción (tsc + vite build)
+- `npm test` — ejecutar tests Vitest
+- `npm run lint` — ejecutar ESLint
 
 ## Próximo paso
 
-Etapa 1: scaffold Vite + React + TS + Tailwind + PWA + lint.
+Etapa 2: StorageAdapter + localStorage + modelo versionado con migración.
