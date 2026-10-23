@@ -1,11 +1,24 @@
 import React, { useEffect } from 'react'
-import { useAppStore, useTodayHabits, isHabitCompletedToday } from '../store'
+import {
+  useAppStore,
+  useTodayHabits,
+  isHabitCompletedToday,
+  usePendingAmuleto,
+} from '../store'
 import { hoyLocal, calcularMood } from '../domain'
 import Personaje from '../components/character/Personaje'
 import CelebrationModal from '../components/CelebrationModal'
+import AmuletoModal from '../components/AmuletoModal'
 
 export default function Today(): React.ReactElement {
-  const { character, playerState, toggleCompletion, celebration, hideCelebration } = useAppStore()
+  const {
+    character,
+    playerState,
+    toggleCompletion,
+    celebration,
+    hideCelebration,
+  } = useAppStore()
+  const pendingAmuleto = usePendingAmuleto()
   const todayHabits = useTodayHabits()
   const today = hoyLocal()
 
