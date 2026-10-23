@@ -2,8 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+const base = process.env.VITE_BASE_PATH || '/abumento/';
+
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/',
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -32,8 +34,8 @@ export default defineConfig({
         name: 'Abitudine',
         short_name: 'Abitudine',
         description: 'Registro de hábitos con personaje aventurero',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#0f172a',
@@ -42,19 +44,19 @@ export default defineConfig({
         categories: ['productivity', 'lifestyle'],
         icons: [
           {
-            src: '/pwa-192x192.png',
+            src: `${base}pwa-192x192.png`,
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/pwa-512x512.png',
+            src: `${base}pwa-512x512.png`,
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/maskable-icon.png',
+            src: `${base}maskable-icon.png`,
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',

@@ -56,7 +56,7 @@ function App(): React.ReactElement {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="min-h-screen flex flex-col bg-slate-900 text-white">
         <Nav />
         <main className="flex-1 md:pl-64 pb-20 md:pb-0 relative z-10">
