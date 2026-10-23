@@ -6,18 +6,18 @@
 |-------|--------|--------|
 | 0 | Cimientos y plan (git, .gitignore, SPEC, AGENTS, PROGRESS, PLAN, etapa-0) | hecha |
 | 1 | Scaffold Vite + React + TS + Tailwind + Vitest + ESLint + Prettier + tipos de dominio + progresión + tests | hecha |
-| 2 | StorageAdapter + localStorage + modelo versionado con migración | en curso |
-| 3 | Dominio puro: hábitos, cumplimientos, rachas | pendiente |
-| 4 | Dominio puro: XP, niveles, rangos, atributos, amuletos | pendiente |
-| 5 | Pantalla onboarding y creación de personaje | pendiente |
-| 6 | Pantalla Hoy: marcar/desmarcar hábitos del día | pendiente |
-| 7 | Pantalla Hábitos: crear, editar, archivar, borrar | pendiente |
+| 2 | StorageAdapter + localStorage + modelo versionado con migración + store Zustand + navegación responsive + pantallas Hoy/Hábitos/Onboarding + cambio de día | hecha |
+| 3 | Dominio puro: hábitos, cumplimientos, rachas | hecha |
+| 4 | Dominio puro: XP, niveles, rangos, atributos, amuletos | hecha |
+| 5 | Pantalla onboarding y creación de personaje | hecha |
+| 6 | Pantalla Hoy: marcar/desmarcar hábitos del día | hecha |
+| 7 | Pantalla Hábitos: crear, editar, archivar, borrar | hecha |
 | 8 | Pantalla Progreso: calendario y corrección hasta 7 días atrás | pendiente |
 | 9 | Personaje SVG por capas y estados de ánimo | pendiente |
 | 10 | Pantalla Inventario y catálogo de equipo con desbloqueos | pendiente |
 | 11 | Pantalla Ajustes y manejo de errores de storage | pendiente |
 | 12 | Accesibilidad (contraste, 44px, labels, teclado) y tests Vitest | pendiente |
-| 13 | PWA instalable y cambio de día con app abierta | pendiente |
+| 13 | PWA instalable y cambio de día con app abierta | hecha |
 | 14 | Polish, build de producción y release | pendiente |
 
 ## Comandos clave
@@ -29,4 +29,4 @@
 
 ## Próximo paso
 
-Etapa 2: StorageAdapter + localStorage + modelo versionado con migración.
+Etapa 8: Pantalla Progreso (calendario y corrección hasta 7 días atrás) o Etapa 9: Personaje SVG por capas.

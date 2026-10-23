@@ -44,3 +44,4 @@ export {
 export { puedeDesbloquear, equipoDesbloqueado } from './unlocks'
 
 export { recalcularEstado, estadoInicial } from './recalculo'
+export { LocalStorageAdapter, DATA_VERSION, StorageError, createEmptySaveData } from './storage'
